@@ -10,5 +10,4 @@ for test in "${tests}"; do
     echo "${test}"
     echo "**********************************"
     cd ${test} && source test.sh
-    echo ""
 done

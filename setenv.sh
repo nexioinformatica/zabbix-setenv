@@ -42,6 +42,8 @@ if [ ${setenv_debug} -eq 1 ]; then
     echo "zbx root   = ${zbx_root}"
     echo "zbx passwd = ${zbx_passwd_filepath}"
     echo "zbx data   = ${zbx_data_filepath}"
+    echo "docker-compose in use = ${zbx_root}/${docker_compose_f}"
+    echo "new docker-compose    = ${zbx_root}/docker-compose.yml"
 fi
 
 # do some checks before deleting configs to prevent loss of data
@@ -77,4 +79,4 @@ rm -f "${zbx_root}/docker-compose.yaml"
 
 ln -s "${env_passwd_filepath}" "${zbx_passwd_filepath}"
 ln -s "${env_data_filepath}" "${zbx_data_filepath}"
-ln -s "${env_root}/${docker_compose_f}" "${zbx_root}/docker-compose.yaml"
+ln -s "${zbx_root}/${docker_compose_f}" "${zbx_root}/docker-compose.yaml"

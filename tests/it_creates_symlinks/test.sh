@@ -16,8 +16,6 @@ main_script="`pwd`/../../setenv.sh"
 
 ## MAIN
 
-rm -rf target/*
-
 source "${main_script}"
 
 file_tests=("${zbx_root}/docker-compose.yaml" "${zbx_root}/.POSTGRES_PASSWORD" "${zbx_root}/zbx_env/data.txt")
