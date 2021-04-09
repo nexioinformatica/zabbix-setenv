@@ -12,7 +12,8 @@ env_data_filepath="${env_data_filepath:-${env_root}/${data_folder_fn}}"
 
 now="$(date +"%Y%m%d%H%M%S")"
 
-out_file="${out_file:-${data_folder_fn}_${now}.tar.gz}"
+out_root="${out_root:-"`pwd`/backups"}"
+out_file="${out_file:-${out_root}/${data_folder_fn}_${now}.tar.gz}"
 
 # enable tar verbose mode if `setenv_debug` = 1
 [ ${setenv_debug} -eq 1 ] && v="-v" || v=""
