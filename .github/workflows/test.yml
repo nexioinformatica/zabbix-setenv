@@ -1,0 +1,14 @@
+name: test
+
+on: [push]
+
+jobs:
+  test:
+    name: Test on ubuntu-latest
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      - run: cd tests && ./runall.sh
