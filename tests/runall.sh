@@ -1,13 +1,15 @@
 #!/bin/bash
 
-export setenv_debug=1
-export setenv_noprompt=1
+source functions.sh
 
-tests=("it_creates_symlinks")
+export setenv_debug="${setenv_debug:-1}"
+export setenv_noprompt="${setenv_noprompt:-1}"
 
-for test in "${tests}"; do
+tests=("it_creates_symlinks" "it_creates_backups")
+
+for test in ${tests[*]}; do
     echo "**********************************"
     echo "${test}"
     echo "**********************************"
-    cd ${test} && source test.sh
+    ( cd ${test} ; source test.sh )
 done
