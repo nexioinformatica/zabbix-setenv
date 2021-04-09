@@ -1,5 +1,7 @@
 # xabbix-setenv
 
+[![test](https://github.com/nexioinformatica/zabbix-setenv/actions/workflows/test.yml/badge.svg)](https://github.com/nexioinformatica/zabbix-setenv/actions/workflows/test.yml)
+
 Configure zabbix-docker environment and secrets. Manage them outside the `zabbix-docker` for easier updates and data management.
 
 ## Usage
