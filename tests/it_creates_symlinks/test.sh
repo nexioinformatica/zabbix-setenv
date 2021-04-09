@@ -1,34 +1,24 @@
 #!/bin/bash
 
-check_file_exists() {
-    if [ ! -f "$1" ]; then
-        echo "$1 not found"
-        return 1
-    fi
+setup() {
+    export env_root="`pwd`/source"
+    export zbx_root="`pwd`/target"
 
-    return 0
+    main_script="`pwd`/../../setenv.sh"
 }
 
-export env_root="`pwd`/source"
-export zbx_root="`pwd`/target"
+it_creates_symlinks() {
+    setup
+    source "${main_script}"
 
-main_script="`pwd`/../../setenv.sh"
+    file_tests=("${zbx_root}/docker-compose.yaml" "${zbx_root}/.POSTGRES_PASSWORD" "${zbx_root}/zbx_env/data.txt")
 
-## MAIN
+    all check_file_exists $file_tests
+    outcome=$?
 
-source "${main_script}"
+    pp "it creates symlinks" ${outcome}
 
-file_tests=("${zbx_root}/docker-compose.yaml" "${zbx_root}/.POSTGRES_PASSWORD" "${zbx_root}/zbx_env/data.txt")
-ok=0
+    stop "${outcome}"
+}
 
-for f_test in ${file_tests[*]}; do
-    check_file_exists "${f_test}"
-    is_error=$?
-
-    if [ "${is_error}" -eq 1 ]; then
-        echo "FAIL"
-        exit 1
-    fi
-done
-
-echo "SUCCESS"
+it_creates_symlinks

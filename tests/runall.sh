@@ -8,8 +8,9 @@ export setenv_noprompt="${setenv_noprompt:-1}"
 tests=("it_creates_symlinks" "it_creates_backups")
 
 for test in ${tests[*]}; do
-    echo "**********************************"
-    echo "${test}"
-    echo "**********************************"
+    [ ${setenv_debug} -eq 1 ] && echo "****************************"
+    [ ${setenv_debug} -eq 1 ] && echo "${test}"
+    [ ${setenv_debug} -eq 1 ] && echo "****************************"
     ( cd ${test} ; source test.sh )
+    [ ${setenv_debug} -eq 1 ] && echo ""
 done
