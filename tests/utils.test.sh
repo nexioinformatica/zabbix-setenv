@@ -4,6 +4,8 @@ source "`pwd`/functions.sh"
 
 main_script="`pwd`/../utils.sh"
 
+export setenv_root="`pwd`/.."
+
 it_prints_debug_strings_if_enabled() {
     setup() {
         export setenv_debug=1

@@ -28,6 +28,7 @@ print_debug() {
     debug "setenv_debug = ${setenv_debug}"
     debug "setenv_noprompt = ${setenv_noprompt}"
     debug "setenv_use_defaults = ${setenv_use_defaults}"
+    debug "setenv_root = ${setenv_root}"
 }
 
 check_defaults_usage() {

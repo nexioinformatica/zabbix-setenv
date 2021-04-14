@@ -10,6 +10,11 @@ runall() {
     utils_tests=("it_prints_debug_strings_if_enabled" "it_does_not_print_debug_strings_when_disabled" "it_returns_true_if_file_exists" "it_returns_false_if_file_does_not_exists" "it_returns_true_when_user_wants_to_proceed")
 
     runsuite "${utils_suite}" "${utils_tests[@]}"
+
+    setenv_suite="setenv.test.sh"
+    setenv_tests=("it_symlinks_all_content_in_folder" "it_fails_creating_symlinks_if_no_defaults")
+
+    runsuite "${setenv_suite}" "${setenv_tests[@]}"
 }
 
 runsuite() {
@@ -42,6 +47,10 @@ runsuite() {
     local n_ok=$(("${n_tests}" - "${n_failed}"))
 
     echo "Passed ${n_ok} of ${n_tests} tests, ${n_failed} failed."
+
+    if [ "${n_failed}" -gt "0" ]; then
+        return 1
+    fi
 }
 
 runall
