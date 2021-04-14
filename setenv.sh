@@ -19,64 +19,87 @@
 # Please take a look at the docs for further informations:
 #
 
-setenv_noprompt="${setenv_noprompt:-0}"
-setenv_debug="${setenv_debug:-0}"
+print_must_define_variables() {
+    echo "You must define variable values. Take a look at README.md for further"
+    echo "details."
+}
 
-passwd_fn=".POSTGRES_PASSWORD"
-data_folder_fn="zbx_env"
-docker_compose_f="docker-compose_v3_ubuntu_pgsql_latest.yaml"
+print_debug() {
+    debug "setenv_debug = ${setenv_debug}"
+    debug "setenv_noprompt = ${setenv_noprompt}"
+    debug "setenv_use_defaults = ${setenv_use_defaults}"
+}
 
-env_root="${env_root:-`pwd`}"
-env_passwd_filepath="${env_passwd_filepath:-${env_root}/${passwd_fn}}"
-env_data_filepath="${env_data_filepath:-${env_root}/${data_folder_fn}}"
-
-zbx_root="${zbx_root:-`pwd`/zabbix-docker}"
-zbx_passwd_filepath="${zbx_passwd_filepath:-${zbx_root}/${passwd_fn}}"
-zbx_data_filepath="${zbx_data_filepath:-${zbx_root}/${data_folder_fn}}"
-
-if [ ${setenv_debug} -eq 1 ]; then
-    echo "debug is enabled"
-    echo "env root   = ${env_root}"
-    echo "env passwd = ${env_passwd_filepath}"
-    echo "env data   = ${env_data_filepath}"
-    echo "zbx root   = ${zbx_root}"
-    echo "zbx passwd = ${zbx_passwd_filepath}"
-    echo "zbx data   = ${zbx_data_filepath}"
-    echo "docker-compose in use = ${zbx_root}/${docker_compose_f}"
-    echo "new docker-compose    = ${zbx_root}/docker-compose.yml"
-fi
-
-# do some checks before deleting configs to prevent loss of data
-
-if [ ! -f "$env_passwd_filepath" ]; then
-    echo "ERROR: $env_passwd_filepath does not exists."
-    exit 1
-fi
-if [ ! -d "$env_data_filepath" ]; then
-    echo "ERROR: $env_data_filepath does not exists."
-    exit 1
-fi
-
-# 1. delete previous configuration
-
-if [ ${setenv_noprompt} -eq 0 ]; then
-    echo "The following entries will be deleted"
-    echo "* ${zbx_passwd_filepath}"
-    echo "* ${zbx_data_filepath}"
-    echo "* ${zbx_root}/docker-compose.yaml"
-    read -p "Are you sure you want to proceed? [y/n] "
-    if [[ ! $REPLY =~ ^[Yy]$ ]]
-    then
+ask_proceed() {
+    read -p "Are you sure you want to proceed? [y/n] " decision
+    if [[ ! "${decision}" =~ ^[Yy]$ ]]; then
         exit 0
     fi
-fi
+}
 
-rm -f "${zbx_passwd_filepath}"
-rm -rf "${zbx_data_filepath}"
-rm -f "${zbx_root}/docker-compose.yaml"
+check_defaults_usage() {
+    if [ ${setenv_use_defaults} -eq 0 ]; then
+        if [ -z "${source_root}" ] || [ -z "${target_root}" ]; then
+            print_must_define_variables
+            exit 1
+        fi
+    fi
+}
 
-# 2. generate new configuration
+check_source_root_content() {
+    if [ ! -d "${source_root}" ] || [ -z "$(ls -A ${source_root})" ]; then
+        if [ "${setenv_noprompt}" -eq 0 ]; then
+            echo "Either the source directory does not exists or is empty."
+            ask_proceed
+        fi
+    fi
+}
 
-ln -s "${env_passwd_filepath}" "${zbx_passwd_filepath}"
-ln -s "${env_data_filepath}" "${zbx_data_filepath}"
-ln -s "${zbx_root}/${docker_compose_f}" "${zbx_root}/docker-compose.yaml"
+check_target_root_content() {
+    if [ -d "${target_root}" ]; then
+        if [ "${setenv_noprompt}" -eq 0 ]; then
+            echo "The target directory is not empty."
+            ask_proceed
+        fi
+    fi
+}
+
+debug() {
+    if [ ${setenv_debug} -eq 1 ]; then
+        echo "[DEBUG] $1"
+    fi
+}
+
+setenv_noprompt="${setenv_noprompt:-0}"
+setenv_debug="${setenv_debug:-0}"
+setenv_use_defaults="${setenv_use_defaults:-0}"
+# setenv_allowlist="${setenv_allowlist:-""}"
+# setenv_denylist="${setenv_denylist:-""}"
+
+# MAIN
+
+print_debug
+
+check_defaults_usage
+
+source_root="${source_root:-`pwd`/source}"
+target_root="${target_root:-`pwd`/target}"
+
+debug "source_root = ${source_root}"
+debug "target_root = ${target_root}"
+
+check_source_root_content
+check_target_root_content
+
+find ${source_root} -mindepth 1 -maxdepth 1 -printf "%f\n" | while read source_basename
+
+do
+    source_file="${source_root}/${source_basename}"
+    target_file="${target_root}/${source_basename}"
+
+    rm -rf "${target_file}"
+    debug "Removed ${target_file}"
+
+    ln -s "${source_file}" "${target_file}"
+    debug "Symlinked ${source_file} to ${target_file}"
+done

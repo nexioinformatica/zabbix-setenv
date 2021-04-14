@@ -5,7 +5,7 @@ source functions.sh
 export setenv_debug="${setenv_debug:-1}"
 export setenv_noprompt="${setenv_noprompt:-1}"
 
-tests=("it_creates_symlinks" "it_creates_backups")
+tests=("it_creates_symlinks" "it_creates_backups" "it_fails_creating_symlinks_if_no_defaults_and_no_values")
 
 for test in ${tests[*]}; do
     [ ${setenv_debug} -eq 1 ] && echo "****************************"

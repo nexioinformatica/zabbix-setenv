@@ -26,6 +26,16 @@ all() {
     return 0
 }
 
+expect_fail() {
+    if [ "$2" -eq 0 ]; then
+        printf "FAIL: "
+    else
+        printf "SUCCESS: "
+    fi
+
+    printf "$1\n"
+}
+
 pp() {
     if [ "$2" -eq 1 ]; then
         printf "FAIL: "
