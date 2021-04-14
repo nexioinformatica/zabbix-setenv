@@ -4,6 +4,7 @@ source functions.sh
 
 export setenv_debug="${setenv_debug:-1}"
 export setenv_noprompt="${setenv_noprompt:-1}"
+export setenv_root="`pwd`/.."
 
 tests=("it_creates_symlinks" "it_creates_backups" "it_fails_creating_symlinks_if_no_defaults_and_no_values")
 

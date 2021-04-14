@@ -1,3 +1,7 @@
+tt=0
+
+ff=1
+
 check_file_exists() {
     if [ ! -f "$1" ]; then
         echo "$1 not found"
@@ -5,6 +9,10 @@ check_file_exists() {
     fi
 
     return 0
+}
+
+skip() {
+    return "${tt}"
 }
 
 # $1: the predicate `pred` to execute on each element of the list
@@ -36,14 +44,46 @@ expect_fail() {
     printf "$1\n"
 }
 
-pp() {
-    if [ "$2" -eq 1 ]; then
-        printf "FAIL: "
-    else
-        printf "SUCCESS: "
+is_true() {
+    if [ "$1" = "${tt}" ]; then
+        return "${tt}"
     fi
 
-    printf "$1\n"
+    return "${ff}"
+}
+
+is_false() {
+    if [ "$1" = "${ff}" ]; then
+        return "${tt}"
+    fi
+
+    return "${ff}"
+}
+
+is_empty_string() {
+    if [ -z "$1" ]; then
+        return "${tt}"
+    else
+        return "${ff}"
+    fi
+}
+
+is_nonempty_string() {
+    if [ -z "$1" ]; then
+        return "${ff}"
+    else
+        return "${tt}"
+    fi
+}
+
+pp() {
+    if [ "$1" = "${tt}" ]; then
+        printf "SUCCESS: "
+    else
+        printf "FAIL: "
+    fi
+
+    printf "$2\n"
 }
 
 stop() {

@@ -30,13 +30,6 @@ print_debug() {
     debug "setenv_use_defaults = ${setenv_use_defaults}"
 }
 
-ask_proceed() {
-    read -p "Are you sure you want to proceed? [y/n] " decision
-    if [[ ! "${decision}" =~ ^[Yy]$ ]]; then
-        exit 0
-    fi
-}
-
 check_defaults_usage() {
     if [ ${setenv_use_defaults} -eq 0 ]; then
         if [ -z "${source_root}" ] || [ -z "${target_root}" ]; then
@@ -64,19 +57,16 @@ check_target_root_content() {
     fi
 }
 
-debug() {
-    if [ ${setenv_debug} -eq 1 ]; then
-        echo "[DEBUG] $1"
-    fi
-}
-
 setenv_noprompt="${setenv_noprompt:-0}"
 setenv_debug="${setenv_debug:-0}"
 setenv_use_defaults="${setenv_use_defaults:-0}"
+setenv_root="${setenv_root:-`pwd`}"
 # setenv_allowlist="${setenv_allowlist:-""}"
 # setenv_denylist="${setenv_denylist:-""}"
 
 # MAIN
+
+source "${setenv_root}/utils.sh"
 
 print_debug
 

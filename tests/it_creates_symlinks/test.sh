@@ -18,7 +18,7 @@ it_creates_symlinks() {
     all check_file_exists $file_tests
     outcome=$?
 
-    pp "it creates symlinks" ${outcome}
+    pp ${outcome} "it creates symlinks"
 
     stop "${outcome}"
 }

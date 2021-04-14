@@ -21,7 +21,7 @@ it_creates_targz_backup() {
     all check_file_exists $file_tests
     outcome=$?
 
-    pp "it creates .tar.gz backup" ${outcome}
+    pp ${outcome} "it creates .tar.gz backup"
 
     stop "${outcome}"
 }
