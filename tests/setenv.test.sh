@@ -30,6 +30,8 @@ it_symlinks_all_content_in_folder() {
     return_value=$(all check_file_exists ${test_files})
     return_code="$?"
 
+    [ "${setenv_debug}" -eq "1" ] && echo "${return_value}"
+
     is_true "${return_code}"
     expected_ok="$?"
 
@@ -53,6 +55,8 @@ it_fails_creating_symlinks_if_no_defaults() {
 
     return_value=$("${main_script}")
     return_code="$?"
+
+    [ "${setenv_debug}" -eq "1" ] && echo "${return_value}"
 
     is_false "${return_code}"
     expected_ok="$?"

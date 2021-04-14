@@ -22,6 +22,8 @@ it_prints_debug_strings_if_enabled() {
     return_value=$(debug "Hello, World!")
     return_code=$?
 
+    [ "${setenv_debug}" -eq "1" ] && echo "${return_value}"
+
     is_nonempty_string "${return_value}"
     expected_ok=$?
 
@@ -47,6 +49,8 @@ it_does_not_print_debug_strings_when_disabled() {
 
     return_value=$(debug "Hello, World!")
     return_code=$?
+
+    [ "${setenv_debug}" -eq "1" ] && echo "${return_value}"
 
     is_empty_string "${return_value}"
     expected_ok=$?
@@ -76,6 +80,8 @@ it_returns_true_if_file_exists() {
     return_value=$(check_file_exists "${filepath}")
     return_code="$?"
 
+    [ "${setenv_debug}" -eq "1" ] && echo "${return_value}"
+
     is_true "${return_code}"
     expected_ok="$?"
 
@@ -102,6 +108,8 @@ it_returns_false_if_file_does_not_exists() {
     return_value=$(check_file_exists "${filepath}")
     return_code="$?"
 
+    [ "${setenv_debug}" -eq "1" ] && echo "${return_value}"
+
     is_false "${return_code}"
     expected_ok="$?"
 
@@ -127,6 +135,8 @@ it_returns_true_when_user_wants_to_proceed() {
 
     return_value=$(yes | ask_proceed)
     return_code="$?"
+
+    [ "${setenv_debug}" -eq "1" ] && echo "${return_value}"
 
     is_true "${return_code}"
     expected_ok="$?"
