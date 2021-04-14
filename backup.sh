@@ -1,29 +1,29 @@
 setenv_noprompt="${setenv_noprompt:-0}"
 setenv_debug="${setenv_debug:-0}"
+setenv_root="${setenv_root:-`pwd`}"
 
-if [ ${setenv_debug} -eq 1 ]; then
-    echo "debug is enabled"
-fi
+# MAIN
 
-data_folder_fn="zbx_env"
+source "${setenv_root}/utils.sh"
 
-env_root="${env_root:-`pwd`}"
-env_data_filepath="${env_data_filepath:-${env_root}/${data_folder_fn}}"
+source_root="${source_root:-`pwd`/source}"
+target_root="${target_root:-`pwd`/target}"
 
 now="$(date +"%Y%m%d%H%M%S")"
 
-out_root="${out_root:-"`pwd`/backups"}"
-out_file="${out_file:-${out_root}/${data_folder_fn}_${now}.tar.gz}"
+out_file="${out_file:-${target_root}/${backup}_${now}.tar.gz}"
 
 # enable tar verbose mode if `setenv_debug` = 1
-[ ${setenv_debug} -eq 1 ] && v="-v" || v=""
+[ "${setenv_debug}" -eq "1" ] && v="-v" || v=""
 
-if [ ${setenv_debug} -eq 1 ]; then
-    echo "out file = ${out_file}"
-    echo "diname   = `dirname ${env_data_filepath}`"
-    echo "basename = `basename ${env_data_filepath}`"
+if [ "${setenv_debug}" -eq "1" ]; then
+    debug "out file = ${out_file}"
+    debug "diname   = `dirname ${source_root}`"
+    debug "basename = `basename ${source_root}`"
 fi
+
+debug "Creating .tar.gz archive"
 
 # Create and zip an archive with filename `out_file` for `env_data_filepath`.
 # Also, do not store full path.
-tar -cz ${v} -f ${out_file} -C "`dirname ${env_data_filepath}`" "`basename ${env_data_filepath}`"
+tar -cz ${v} -f ${out_file} -C "`dirname ${source_root}`" "`basename ${source_root}`"

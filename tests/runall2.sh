@@ -15,6 +15,11 @@ runall() {
     setenv_tests=("it_symlinks_all_content_in_folder" "it_fails_creating_symlinks_if_no_defaults")
 
     runsuite "${setenv_suite}" "${setenv_tests[@]}"
+
+    backup_suite="backup.test.sh"
+    backup_tests=("it_creates_targz_backups")
+
+    runsuite "${backup_suite}" "${backup_tests[@]}"
 }
 
 runsuite() {
