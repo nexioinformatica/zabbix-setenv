@@ -40,8 +40,8 @@ mkdir zbx_env             # or copy an existing zbx_env folder
 3. Run the `setenv.sh` script to arrange the environment.
 
 ```bash
-export env_root="`pwd`/env"
-export zbx_root="`pwd`/zabbix-docker"
+export source_root="`pwd`/env"
+export target_root="`pwd`/zabbix-docker"
 
 git clone https://github.com/nexioinformatica/zabbix-setenv.git && cd zabbix-setenv
 ./setenv.sh
@@ -49,21 +49,23 @@ git clone https://github.com/nexioinformatica/zabbix-setenv.git && cd zabbix-set
 
 ### Options
 
-Tune the script behaviour by overriding the following env variables.
+Tune the script behaviour by overriding the following env variables. Variables types are reported in the table below.
 
-| Var                   | Type          | Default                                | Description                                  |
-| --------------------- | ------------- | -------------------------------------- | -------------------------------------------- |
-| `setenv_debug`        | `bool` \[^1\] | `0`                                    | Enable or disable debug. Set to 1 to enable. |
-| `setenv_noprompt`     | `bool`        | `0`                                    | Enable or disable prompt confirmation.       |
-| `env_root`            | `path`        | `pwd` \[^2\]                           | Set the env folder.                          |
-| `env_passwd_filepath` | `path`        | `pwd/.POSTGRES_PASSWORD`               | Set the passwd env filepath.                 |
-| `env_data_filepath`   | `path`        | `pwd/zbx_env`                          | Set the env data folder filepath.            |
-| `zbx_root`            | `path`        | `pwd/zabbix-docker`                    | The path where configs are symlinked.        |
-| `zbx_passwd_filepath` | `path`        | `pwd/zabbix-docker/.POSTGRES_PASSWORD` | The password filepath to symlink.            |
-| `zbx_data_filepath`   | `path`        | `pwd/zabbix-docker/zbx_env`            | The data folder to symlink.                  |
+**Variables**
 
-\[^1\] Values in \{0, 1\}
-\[^2\] The output of the `pwd` command
+| Var                   | Type   | Default                                 | Description                                                     |
+| --------------------- | ------ | --------------------------------------- | --------------------------------------------------------------- |
+| `setenv_debug`        | _bool_ | `0` (i.e., disabled)                    | Enable or disable debug.                                        |
+| `setenv_noprompt`     | _bool_ | `0` (i.e., disabled)                    | Enable or disable prompt confirmation.                          |
+| `setenv_use_defaults` | _bool_ | `0` (i.e., disabled)                    | Enable or disable defaults. This prevent unintented executions. |
+| `setenv_root`         | _path_ | `pwd` (i.e., current working directory) | Path to script root. (This is used to _source_ other scripts)   |
+
+**Types**
+
+| Type   | Values                      | Description and Notes                                                                   |
+| ------ | --------------------------- | --------------------------------------------------------------------------------------- |
+| _bool_ | `0`, `1`                    | Even if we are in bash, for readability reason we use `0` as _false_ and `1` as _true_. |
+| _path_ | A valid path (posix format) | Please note that we do not check path correctenss.                                      |
 
 ## Tests
 
